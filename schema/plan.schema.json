@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://workplanr.dev/schema/plan.schema.json",
+  "title": "Workplanr Plan",
+  "type": "object",
+  "required": ["schema_version", "project", "tasks"],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "project": {
+      "type": "object",
+      "required": ["id", "name", "goal"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "goal": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Task" }
+    },
+    "proposals": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Proposal" }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "branch": { "type": "string" },
+        "created_by": { "type": "string" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "definitions": {
+    "Task": {
+      "type": "object",
+      "required": ["id", "title", "status", "priority"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "enum": ["pending", "in_progress", "blocked", "done"] },
+        "priority": { "enum": ["low", "medium", "high", "critical"] },
+        "depends_on": { "type": "array", "items": { "type": "string" } },
+        "agent_assignee": { "type": ["string", "null"] },
+        "progress": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "dod_ref": { "type": "string" },
+        "subtasks": { "type": "array", "items": { "$ref": "#/definitions/Task" } },
+        "log": { "type": "array", "items": { "$ref": "#/definitions/LogEntry" } },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Proposal": {
+      "type": "object",
+      "required": ["id", "task_id", "status", "proposed_by", "proposed_at", "subtasks"],
+      "properties": {
+        "id": { "type": "string" },
+        "task_id": { "type": "string" },
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "proposed_by": { "type": "string" },
+        "proposed_at": { "type": "string", "format": "date-time" },
+        "subtasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "description", "estimated_complexity"],
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "estimated_complexity": { "enum": ["s", "m", "l"] }
+            }
+          }
+        }
+      }
+    },
+    "LogEntry": {
+      "type": "object",
+      "required": ["ts", "actor", "event"],
+      "properties": {
+        "ts": { "type": "string", "format": "date-time" },
+        "actor": { "type": "string" },
+        "event": { "type": "string" },
+        "payload": { "type": "object" }
+      }
+    }
+  }
+}

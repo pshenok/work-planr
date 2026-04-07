@@ -1,0 +1,46 @@
+{
+  "name": "workplanr",
+  "version": "0.1.0",
+  "description": "Planning as code, for humans and agents",
+  "type": "module",
+  "bin": {
+    "wp": "./dist/index.js"
+  },
+  "main": "./dist/mcp/server.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --experimental-strip-types src/index.ts",
+    "test": "node --test test/**/*.test.ts --experimental-strip-types",
+    "serve": "node dist/mcp/server.js"
+  },
+  "keywords": [
+    "mcp",
+    "ai-agent",
+    "planning",
+    "cli",
+    "tui",
+    "workplan"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist",
+    "schema"
+  ],
+  "dependencies": {
+    "@inkjs/ui": "^2.0.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "ink": "^6.8.0",
+    "react": "^19.2.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "typescript": "^6.0.2"
+  }
+}
