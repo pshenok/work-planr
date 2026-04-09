@@ -9,6 +9,8 @@ export async function addCommand(
     priority?: string;
     dependsOn?: string;
     dod?: string;
+    why?: string;
+    accept?: string;
   },
 ): Promise<void> {
   const plan = await readPlan();
@@ -21,9 +23,15 @@ export async function addCommand(
     ? options.dependsOn.split(",").map((s) => s.trim())
     : [];
 
+  const acceptance = options.accept
+    ? options.accept.split(";").map((s) => s.trim())
+    : undefined;
+
   const task: Task = {
     id,
     title,
+    ...(options.why ? { why: options.why } : {}),
+    ...(acceptance ? { acceptance_criteria: acceptance } : {}),
     status: "pending",
     priority,
     depends_on: dependsOn,

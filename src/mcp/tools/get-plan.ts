@@ -1,11 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { readPlan } from "../../core/plan.js";
+import { readLessons } from "../../core/lessons.js";
 import type { TaskStatus } from "../../types/plan.js";
 
 export function registerGetPlan(server: McpServer): void {
   server.tool("get_plan", "Returns the full current plan with summary statistics", {}, async () => {
     try {
-      const plan = await readPlan();
+      const [plan, lessons] = await Promise.all([readPlan(), readLessons()]);
       const summary = {
         total: plan.tasks.length,
         done: 0,
@@ -32,6 +33,7 @@ export function registerGetPlan(server: McpServer): void {
                 proposals: plan.proposals,
                 branch: plan.meta.branch,
                 summary,
+                lessons,
               },
               null,
               2,

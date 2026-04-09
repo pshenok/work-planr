@@ -6,19 +6,32 @@ import { registerUpdateProgress } from "./tools/update-progress.js";
 import { registerValidateDod } from "./tools/validate-dod.js";
 import { registerCompleteTask } from "./tools/complete-task.js";
 import { registerProposeSubtasks } from "./tools/propose-subtasks.js";
+import { registerStartSession } from "./tools/start-session.js";
+import { registerEndSession } from "./tools/end-session.js";
+import { registerLogDecision } from "./tools/log-decision.js";
+import { registerReportLesson } from "./tools/report-lesson.js";
 
 export function createServer(): McpServer {
   const server = new McpServer({
     name: "workplanr",
-    version: "0.1.0",
+    version: "0.2.0",
   });
 
+  // Plan & tasks
   registerGetPlan(server);
   registerGetNextTask(server);
   registerUpdateProgress(server);
   registerValidateDod(server);
   registerCompleteTask(server);
   registerProposeSubtasks(server);
+
+  // Session journal
+  registerStartSession(server);
+  registerEndSession(server);
+  registerLogDecision(server);
+
+  // Lessons learned
+  registerReportLesson(server);
 
   return server;
 }

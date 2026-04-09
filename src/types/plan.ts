@@ -24,6 +24,8 @@ export const SubtaskSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string().optional(),
+  why: z.string().optional(),
+  acceptance_criteria: z.array(z.string()).optional(),
   status: TaskStatusSchema,
   priority: PrioritySchema,
   depends_on: z.array(z.string()).default([]),
@@ -94,6 +96,36 @@ export type Proposal = z.infer<typeof ProposalSchema>;
 export type Project = z.infer<typeof ProjectSchema>;
 export type Meta = z.infer<typeof MetaSchema>;
 export type Plan = z.infer<typeof PlanSchema>;
+
+// --- Session Journal ---
+
+export const JournalEntrySchema = z.object({
+  session_id: z.string(),
+  started_at: z.string().datetime(),
+  ended_at: z.string().datetime().optional(),
+  agent: z.string(),
+  branch: z.string(),
+  tasks_worked: z.array(z.string()).default([]),
+  tasks_completed: z.array(z.string()).default([]),
+  decisions: z.array(z.string()).default([]),
+  files_changed: z.array(z.string()).default([]),
+  blockers: z.array(z.string()).default([]),
+  summary: z.string().optional(),
+});
+
+export type JournalEntry = z.infer<typeof JournalEntrySchema>;
+
+// --- Lessons Learned ---
+
+export const LessonSchema = z.object({
+  id: z.string(),
+  created_at: z.string().datetime(),
+  context: z.string(),
+  lesson: z.string(),
+  tags: z.array(z.string()).default([]),
+});
+
+export type Lesson = z.infer<typeof LessonSchema>;
 
 // --- Priority ordering ---
 
