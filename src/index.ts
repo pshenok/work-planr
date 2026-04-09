@@ -12,13 +12,18 @@ import {
   approveProposalCommand,
   rejectProposalCommand,
 } from "./cli/commands/propose.js";
+import { journalCommand } from "./cli/commands/journal.js";
+import {
+  lessonsListCommand,
+  lessonsAddCommand,
+} from "./cli/commands/lessons.js";
 
 const program = new Command();
 
 program
   .name("wp")
   .description("Workplanr — planning as code, for humans and agents")
-  .version("0.1.0");
+  .version("0.2.0");
 
 program
   .command("init")
@@ -33,6 +38,8 @@ program
   .option("--priority <priority>", "low | medium | high | critical", "medium")
   .option("--depends-on <ids>", "Comma-separated task IDs")
   .option("--dod <path>", "Path to custom DoD template")
+  .option("--why <reason>", "Business context — why this task matters")
+  .option("--accept <criteria>", "Acceptance criteria (semicolon-separated)")
   .action(addCommand);
 
 program
@@ -72,5 +79,26 @@ program
   .command("tui")
   .description("Open TUI dashboard")
   .action(tuiCommand);
+
+program
+  .command("journal")
+  .description("Show last session journal")
+  .action(journalCommand);
+
+const lesson = program
+  .command("lesson")
+  .description("Manage lessons learned");
+
+lesson
+  .command("list")
+  .description("List all lessons")
+  .action(lessonsListCommand);
+
+lesson
+  .command("add <lesson>")
+  .description("Add a lesson")
+  .requiredOption("--context <context>", "What happened")
+  .option("--tags <tags>", "Comma-separated tags")
+  .action(lessonsAddCommand);
 
 program.parse();
